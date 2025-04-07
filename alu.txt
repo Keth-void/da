@@ -1,0 +1,108 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity alu is
+    Port ( 
+        inp_a    : in signed(3 downto 0);
+        inp_b    : in signed(3 downto 0);
+        sel      : in STD_LOGIC_VECTOR(2 downto 0);
+        out_alu  : out signed(3 downto 0)
+    );
+end alu;
+
+architecture Behavioral of alu is
+begin
+    process(inp_a, inp_b, sel)
+    begin
+        case sel is
+            when "000" =>
+                out_alu <= inp_a + inp_b;        -- Addition
+            when "001" =>
+                out_alu <= inp_a - inp_b;        -- Subtraction
+            when "010" =>
+                out_alu <= inp_a - 1;            -- Subtract 1
+            when "011" =>
+                out_alu <= inp_a + 1;            -- Add 1
+            when "100" =>
+                out_alu <= inp_a and inp_b;      -- AND
+            when "101" =>
+                out_alu <= inp_a or inp_b;       -- OR
+            when "110" =>
+                out_alu <= signed(not std_logic_vector(inp_a));  -- NOT (bitwise)
+            when "111" =>
+                out_alu <= inp_a xor inp_b;      -- XOR
+            when others =>
+                out_alu <= (others => '0');      -- Default output
+        end case;
+    end process;
+end Behavioral;
+-----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity tb_alu is
+end tb_alu;
+
+architecture Behavioral of tb_alu is
+
+    -- Component Declaration
+    component alu
+        Port ( 
+            inp_a   : in signed(3 downto 0);
+            inp_b   : in signed(3 downto 0);
+            sel     : in STD_LOGIC_VECTOR(2 downto 0);
+            out_alu : out signed(3 downto 0)
+        );
+    end component;
+
+    -- Signals for Test
+    signal inp_a, inp_b, out_alu : signed(3 downto 0);
+    signal sel : STD_LOGIC_VECTOR(2 downto 0);
+
+begin
+
+    -- Instantiate the ALU
+    uut: alu
+        port map (
+            inp_a => inp_a,
+            inp_b => inp_b,
+            sel => sel,
+            out_alu => out_alu
+        );
+
+    -- Stimulus Process
+    process
+    begin
+        inp_a <= to_signed(3, 4);  -- binary: 0011
+        inp_b <= to_signed(1, 4);  -- binary: 0001
+
+        -- 000: ADD
+        sel <= "000"; wait for 10 ns;
+        
+        -- 001: SUB
+        sel <= "001"; wait for 10 ns;
+
+        -- 010: SUB 1
+        sel <= "010"; wait for 10 ns;
+
+        -- 011: ADD 1
+        sel <= "011"; wait for 10 ns;
+
+        -- 100: AND
+        sel <= "100"; wait for 10 ns;
+
+        -- 101: OR
+        sel <= "101"; wait for 10 ns;
+
+        -- 110: NOT
+        sel <= "110"; wait for 10 ns;
+
+        -- 111: XOR
+        sel <= "111"; wait for 10 ns;
+
+        wait;
+    end process;
+
+end Behavioral;
