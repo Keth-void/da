@@ -1,0 +1,127 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity parity_generator is
+    Port (
+        A : in STD_LOGIC_VECTOR(3 downto 0);
+        even_parity : out STD_LOGIC;
+        odd_parity  : out STD_LOGIC
+    );
+end parity_generator;
+
+architecture Behavioral of parity_generator is
+begin
+    odd_parity  <= A(0) XOR A(1) XOR A(2) XOR A(3);
+    even_parity <= NOT (A(0) XOR A(1) XOR A(2) XOR A(3));
+end Behavioral;
+---------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity tb_parity_generator is
+end tb_parity_generator;
+
+architecture Behavioral of tb_parity_generator is
+
+    component parity_generator
+        Port (
+            A : in STD_LOGIC_VECTOR(3 downto 0);
+            even_parity : out STD_LOGIC;
+            odd_parity  : out STD_LOGIC
+        );
+    end component;
+
+    signal A : STD_LOGIC_VECTOR(3 downto 0);
+    signal even_parity, odd_parity : STD_LOGIC;
+
+begin
+
+    uut: parity_generator
+        Port map (
+            A => A,
+            even_parity => even_parity,
+            odd_parity => odd_parity
+        );
+
+    process
+    begin
+        A <= "0000"; wait for 10 ns; -- Even parity
+        A <= "0001"; wait for 10 ns; -- Odd parity
+        A <= "0011"; wait for 10 ns; -- Even parity
+        A <= "0111"; wait for 10 ns; -- Odd parity
+        A <= "1111"; wait for 10 ns; -- Even parity
+        A <= "1001"; wait for 10 ns; -- Even parity
+        A <= "1011"; wait for 10 ns; -- Odd parity
+
+        wait;
+    end process;
+
+end Behavioral;
+
+=====================================================
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity pche is
+    Port (
+        A, B, C, D : in BIT;
+        even_parity : out BIT;
+        odd_parity  : out BIT
+    );
+end pche;
+
+architecture Behavioral of pche is
+begin
+    odd_parity  <= A xor B xor C xor D;              
+    even_parity <= not (A xor B xor C xor D);       
+end Behavioral;
+----------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity tb_pche is
+end tb_pche;
+
+architecture Behavioral of tb_pche is
+
+    -- Component Declaration
+    component pche
+        Port (
+            A, B, C, D : in BIT;
+            even_parity : out BIT;
+            odd_parity  : out BIT
+        );
+    end component;
+
+    -- Test Signals
+    signal A, B, C, D : BIT;
+    signal even_parity, odd_parity : BIT;
+
+begin
+
+    -- Instantiate the parity checker
+    uut: pche
+        port map (
+            A => A,
+            B => B,
+            C => C,
+            D => D,
+            even_parity => even_parity,
+            odd_parity => odd_parity
+        );
+
+    -- Stimulus Process
+    process
+    begin
+        -- Test input patterns
+        A <= '0'; B <= '0'; C <= '0'; D <= '0'; wait for 10 ns;  -- Even parity
+        A <= '0'; B <= '0'; C <= '0'; D <= '1'; wait for 10 ns;  -- Odd parity
+        A <= '0'; B <= '1'; C <= '1'; D <= '0'; wait for 10 ns;  -- Even parity
+        A <= '1'; B <= '1'; C <= '1'; D <= '1'; wait for 10 ns;  -- Even parity
+        A <= '1'; B <= '0'; C <= '0'; D <= '1'; wait for 10 ns;  -- Even parity
+        A <= '1'; B <= '0'; C <= '1'; D <= '1'; wait for 10 ns;  -- Odd parity
+
+        wait;
+    end process;
+
+end Behavioral;
