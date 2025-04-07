@@ -1,0 +1,58 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity or_gate is
+    Port (
+        A : in  STD_LOGIC;
+        B : in  STD_LOGIC;
+        Y : out STD_LOGIC
+    );
+end or_gate;
+
+architecture Behavioral of or_gate is
+begin
+    Y <= A OR B;
+end Behavioral;
+-----------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity tb_or_gate is
+end tb_or_gate;
+
+architecture Behavioral of tb_or_gate is
+
+    -- Component Declaration
+    component or_gate
+        Port (
+            A : in  STD_LOGIC;
+            B : in  STD_LOGIC;
+            Y : out STD_LOGIC
+        );
+    end component;
+
+    -- Test Signals
+    signal A, B, Y : STD_LOGIC;
+
+begin
+
+    -- Instantiate OR Gate
+    uut: or_gate
+        Port map (
+            A => A,
+            B => B,
+            Y => Y
+        );
+
+    -- Stimulus Process
+    process
+    begin
+        A <= '0'; B <= '0'; wait for 10 ns;
+        A <= '0'; B <= '1'; wait for 10 ns;
+        A <= '1'; B <= '0'; wait for 10 ns;
+        A <= '1'; B <= '1'; wait for 10 ns;
+
+        wait;
+    end process;
+
+end Behavioral;
