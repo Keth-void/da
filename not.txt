@@ -1,0 +1,52 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity not_gate is
+    Port (
+        A : in  STD_LOGIC;
+        Y : out STD_LOGIC
+    );
+end not_gate;
+
+architecture Behavioral of not_gate is
+begin
+    Y <= NOT A;
+end Behavioral;
+---------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity tb_not_gate is
+end tb_not_gate;
+
+architecture Behavioral of tb_not_gate is
+
+    -- Component Declaration
+    component not_gate
+        Port (
+            A : in  STD_LOGIC;
+            Y : out STD_LOGIC
+        );
+    end component;
+
+    -- Test Signals
+    signal A, Y : STD_LOGIC;
+
+begin
+
+    -- Instantiate NOT Gate
+    uut: not_gate
+        Port map (
+            A => A,
+            Y => Y
+        );
+
+    -- Stimulus Process
+    process
+    begin
+        A <= '0'; wait for 10 ns;
+        A <= '1'; wait for 10 ns;
+        wait;
+    end process;
+
+end Behavioral;
